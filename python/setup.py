@@ -171,7 +171,11 @@ if wheel_include_libs:
     with open("MANIFEST.in", "w") as fo:
         for path in LIB_LIST:
             if os.path.isfile(path):
-                shutil.copy(path, os.path.join(CURRENT_DIR, "tvm"))
+                try:
+                    shutil.copy(path, os.path.join(CURRENT_DIR, "tvm"))
+                except shutil.SameFileError:
+                    # path and CURRENT_DIR are the same.
+                    pass
                 _, libname = os.path.split(path)
                 fo.write(f"include tvm/{libname}\n")
 
